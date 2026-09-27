@@ -1,0 +1,6 @@
+{
+  "name": "Barcin uchun Tulipanlar",
+  "description": "Xadicha uchun maxsus tayyorlangan nafis virtual tulpanlar va samimiy tilaklar sovg‘asi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
