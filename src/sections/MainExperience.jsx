@@ -57,17 +57,13 @@ export default function MainExperience({ onFlowerTap, onLoveBurst }) {
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#FAF0F2] border border-[#F2D7DC] mb-1.5 shadow-2xs">
           <Sparkles className="w-2.5 h-2.5 text-[#C5A059]" />
-          <span className="text-[10px] font-medium tracking-[0.25em] uppercase text-[#9B6E75]">
-            Maxsus Sovg‘a
-          </span>
+       
         </div>
 
         <h1 className="font-serif text-2xl sm:text-[28px] text-[#3A1821] font-medium tracking-tight">
-          Xadicha, bu gullar siz uchun <span className="inline-block hover:scale-110 transition-transform">🌷</span>
+          Xadicha uchun  <span className="inline-block hover:scale-110 transition-transform">🌷</span>
         </h1>
-        <p className="text-xs sm:text-[13px] text-[#7C5A61] font-light mt-0.5">
-          Ba'zi insonlarga gul berish uchun maxsus sabab kerak emas.
-        </p>
+ 
       </motion.header>
 
       {/* 2. Centerpiece: The Luxurious Botanical Tulip Bouquet */}
@@ -101,7 +97,6 @@ export default function MainExperience({ onFlowerTap, onLoveBurst }) {
               >
                 <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-[#A06E76]">
                   <Sparkles className="w-2.5 h-2.5 text-[#C5A059]" />
-                  <span>Siz uchun samimiy tilak</span>
                 </div>
                 <p className="font-serif italic text-sm sm:text-base text-[#42141E] leading-snug">
                   "{RESPECTFUL_WISHES[wishIndex]}"
@@ -126,30 +121,7 @@ export default function MainExperience({ onFlowerTap, onLoveBurst }) {
           </AnimatePresence>
         </div>
 
-        {/* Action Buttons: Secret Letter & Send Smile */}
-        <div className="flex items-center justify-center gap-2.5 w-full pt-0.5">
-          <button
-            onClick={handleOpenLetter}
-            className="px-4 py-2 rounded-full text-xs font-medium text-[#4A111E] bg-[#FFF2F4] hover:bg-[#FCE5E8] border border-[#E8C4C4] active:scale-95 transition-all shadow-xs flex items-center gap-1.5"
-          >
-            <Mail className="w-3.5 h-3.5 text-[#B3354C]" />
-            <span className="font-serif text-[13px] tracking-wide">Yashirin xat 💌</span>
-          </button>
-
-          <button
-            onClick={handleSendSmile}
-            className={`px-4 py-2 rounded-full text-xs font-medium transition-all active:scale-95 flex items-center gap-1.5 shadow-xs ${
-              hasSentSmile
-                ? 'bg-[#5E1926] text-white shadow-md'
-                : 'bg-white/85 hover:bg-white text-[#5E1926] border border-[#E8C4C4]'
-            }`}
-          >
-            <Heart className={`w-3.5 h-3.5 ${hasSentSmile ? 'fill-current text-[#F5C2CB]' : 'text-[#D47A88]'}`} />
-            <span className="font-serif text-[13px] tracking-wide">
-              {hasSentSmile ? 'Tabassum qabul qilindi ✨' : 'Tabassum ulashish 🤍'}
-            </span>
-          </button>
-        </div>
+     
       </motion.footer>
 
       {/* ================= SECRET LETTER MODAL ================= */}

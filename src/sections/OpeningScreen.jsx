@@ -36,9 +36,7 @@ export default function OpeningScreen({ onOpen }) {
           <div className="w-14 h-14 rounded-full bg-white shadow-[0_8px_24px_rgba(212,122,136,0.18)] border border-[#F2D7DC] flex items-center justify-center mb-3">
             <span className="text-2xl transform hover:scale-110 transition-transform">🌷</span>
           </div>
-          <span className="text-[11px] tracking-[0.28em] uppercase text-[#A87178] font-medium">
-            Virtual Sovg‘a
-          </span>
+   
         </motion.div>
 
         {/* Introductory dedicated note */}
