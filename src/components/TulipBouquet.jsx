@@ -140,7 +140,7 @@ export default function TulipBouquet({ onFlowerTap }) {
   return (
     <div
       onClick={(e) => handleBouquetTap(e)}
-      className="relative cursor-pointer select-none flex flex-col items-center justify-center w-[290px] h-[375px] max-h-[46vh] transition-transform active:scale-98"
+      className="relative cursor-pointer select-none flex flex-col items-center justify-center w-[265px] sm:w-[290px] h-[340px] sm:h-[370px] max-h-[44vh] transition-transform active:scale-98"
     >
       {/* Soft warm romantic halo behind bouquet */}
       <div className="absolute top-[10%] w-60 h-60 rounded-full bg-gradient-radial from-[#F7CCD3]/65 via-[#FDF3EE]/35 to-transparent blur-3xl pointer-events-none -z-10 animate-breathe-glow" />

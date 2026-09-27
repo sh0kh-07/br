@@ -1,201 +1,184 @@
 import React, { useMemo } from 'react';
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 
-// Luxury Tulip Petal SVG: Larger, vivid, richly shaded with organic folds & soft dropshadow
-const LuxuryPetal = ({ color, size, rotation, opacity, variant = 0 }) => {
-  const gradientId = `lux-petal-grad-${variant}-${color.replace('#', '')}`;
+// Lightweight, graceful petal count (14 petals) — buttery smooth 60fps on mobile without lag
+const AMBIENT_PETAL_COUNT = 14;
 
-  return (
-    <svg
-      width={size}
-      height={size * 1.5}
-      viewBox="0 0 36 54"
-      fill="none"
-      style={{
-        transform: `rotate(${rotation}deg)`,
-        filter: 'drop-shadow(0 6px 14px rgba(74, 15, 26, 0.22))',
-      }}
-    >
-      <defs>
-        <linearGradient id={gradientId} x1="10%" y1="0%" x2="90%" y2="100%">
-          <stop offset="0%" stopColor="#FFF2F4" stopOpacity="0.95" />
-          <stop offset="20%" stopColor={color} stopOpacity="0.95" />
-          <stop offset="65%" stopColor={color} stopOpacity="0.88" />
-          <stop offset="100%" stopColor="#540C18" stopOpacity="0.95" />
-        </linearGradient>
-
-        <linearGradient id={`sheen-${gradientId}`} x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0" />
-          <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.45" />
-          <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-
-      {/* Main realistic curved petal path */}
-      <path
-        d="M 18 0 C 28 8, 36 24, 32 40 C 28 52, 8 52, 4 40 C 0 24, 8 8, 18 0 Z"
-        fill={`url(#${gradientId})`}
-        opacity={opacity}
-      />
-
-      {/* Elegant center spine satin sheen */}
-      <path
-        d="M 18 6 C 24 16, 26 28, 22 42 C 18 32, 16 18, 18 6 Z"
-        fill={`url(#sheen-${gradientId})`}
-      />
-
-      {/* Soft translucent edge glow */}
-      <path
-        d="M 18 1 C 26 9, 34 23, 31 38 C 29 25, 24 11, 18 1 Z"
-        fill="#FFFFFF"
-        opacity={0.35}
-      />
-    </svg>
-  );
-};
+const PETAL_COLORS = [
+  '#E64C65', // vibrant crimson
+  '#F07188', // coral rose
+  '#F79EB0', // blush pink
+  '#FBCCD7', // soft pastel petal
+  '#D93856', // deep tulip petal
+];
 
 export default function PetalBackground({ cascadeActive = false, bursts = [] }) {
-  // 1. Ambient continuous drifting petals (Large & vivid: 26px to 44px)
+  // Generate stable, lightweight ambient petals
   const ambientPetals = useMemo(() => {
-    const colors = [
-      '#E25B71', // bright tulip ruby
-      '#F492A3', // lush blush pink
-      '#CB3550', // deep velvet crimson
-      '#FAAEC0', // soft rose
-      '#991E33', // dark burgundy
-      '#FFF0F3', // creamy bridal pink
-    ];
+    return Array.from({ length: AMBIENT_PETAL_COUNT }).map((_, i) => {
+      const left = (i / AMBIENT_PETAL_COUNT) * 94 + (Math.sin(i * 3) * 3 + 3);
+      const width = 24 + ((i * 7) % 16); // 24px - 40px elegant size
+      const height = width * 1.45;
+      const duration = 9 + ((i * 5) % 8); // 9s - 16s calm drift
+      const delay = (i * 0.7) % 7;
+      const color = PETAL_COLORS[i % PETAL_COLORS.length];
+      const driftX = (i % 2 === 0 ? 1 : -1) * (20 + (i % 25));
 
-    return Array.from({ length: 32 }).map((_, i) => ({
-      id: `ambient-${i}`,
-      left: (i * 3.1 + Math.random() * 4) % 100,
-      size: 26 + (i % 5) * 4 + Math.random() * 6, // Larger petals (26px - 46px)
-      duration: 7 + (i % 6) * 1.8 + Math.random() * 3,
-      delay: -(i * 0.4 + Math.random() * 5),
-      color: colors[i % colors.length],
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 320,
-      driftX: (Math.random() - 0.5) * 140,
-      opacity: 0.55 + (i % 4) * 0.12,
-      variant: i % 4,
-    }));
+      return {
+        id: `amb-${i}`,
+        left: `${left}%`,
+        width,
+        height,
+        duration,
+        delay,
+        color,
+        driftX,
+        rotateStart: (i * 35) % 360,
+      };
+    });
   }, []);
 
-  // 2. Opening & On-Demand Cascade Petals (Large & dense: 28px to 50px)
-  const cascadePetals = useMemo(() => {
-    if (!cascadeActive) return [];
-    const colors = ['#E25B71', '#CB3550', '#F492A3', '#FAAEC0', '#8C192E', '#FFF0F3'];
-
-    return Array.from({ length: 50 }).map((_, i) => ({
-      id: `cascade-${i}`,
-      left: (i * 2 + Math.random() * 3) % 100,
-      size: 28 + (i % 6) * 4 + Math.random() * 8, // 28px - 52px
-      duration: 4.2 + Math.random() * 4,
-      delay: (i * 0.05) + Math.random() * 0.35,
-      color: colors[i % colors.length],
-      rotation: Math.random() * 360,
-      driftX: (Math.random() - 0.5) * 180,
-      opacity: 0.75 + Math.random() * 0.25,
-      variant: i % 4,
-    }));
-  }, [cascadeActive]);
-
   return (
-    // Note: z-35 ensures petals fall IN FRONT of the flower card, but behind modals (z-50)
-    <div className="fixed inset-0 pointer-events-none z-35 overflow-hidden">
-      {/* Ambient Petals floating gently over everything */}
-      {ambientPetals.map((p) => (
+    <div
+      aria-hidden="true"
+      className="fixed inset-0 pointer-events-none overflow-hidden select-none z-10"
+      style={{ willChange: 'transform' }}
+    >
+      {/* 1. Ambient Gently Drifting Petals (Floating in background behind text) */}
+      {ambientPetals.map((petal) => (
         <motion.div
-          key={p.id}
-          className="absolute -top-20"
-          style={{ left: `${p.left}%` }}
+          key={petal.id}
+          className="absolute top-[-80px]"
+          style={{
+            left: petal.left,
+            width: petal.width,
+            height: petal.height,
+            willChange: 'transform, opacity',
+          }}
+          initial={{ y: -80, opacity: 0, rotate: petal.rotateStart }}
           animate={{
-            y: ['0vh', '118vh'],
-            x: [0, p.driftX, 0],
-            rotate: [p.rotation, p.rotation + p.rotSpeed],
-            scale: [0.92, 1.08, 0.95],
+            y: ['0vh', '115vh'],
+            x: [0, petal.driftX, -petal.driftX * 0.5, petal.driftX * 0.8],
+            rotate: [petal.rotateStart, petal.rotateStart + 180, petal.rotateStart + 360],
+            opacity: [0, 0.85, 0.9, 0],
           }}
           transition={{
-            duration: p.duration,
+            duration: petal.duration,
             repeat: Infinity,
-            delay: p.delay,
+            delay: petal.delay,
             ease: 'linear',
           }}
         >
-          <LuxuryPetal
-            color={p.color}
-            size={p.size}
-            rotation={p.rotation}
-            opacity={p.opacity}
-            variant={p.variant}
-          />
+          <svg
+            viewBox="0 0 32 46"
+            className="w-full h-full drop-shadow-[0_4px_8px_rgba(180,40,65,0.12)]"
+            fill="none"
+          >
+            <path
+              d="M 16 1 C 5 7, 0 20, 1 31 C 2 40, 10 45, 16 45 C 22 45, 30 40, 31 31 C 32 20, 27 7, 16 1 Z"
+              fill={petal.color}
+            />
+            {/* Soft inner petal luster */}
+            <path
+              d="M 16 5 C 10 11, 7 22, 9 32 C 11 39, 15 42, 16 42"
+              stroke="#FFFFFF"
+              strokeWidth="1.2"
+              strokeLinecap="round"
+              opacity="0.35"
+            />
+          </svg>
         </motion.div>
       ))}
 
-      {/* Massive Shower of Falling Petals on Opening / Trigger */}
+      {/* 2. Opening Cascade Petals (Lightweight 12 petals when opened) */}
       {cascadeActive &&
-        cascadePetals.map((cp) => (
+        Array.from({ length: 12 }).map((_, i) => {
+          const left = 5 + (i * 8);
+          const width = 26 + (i % 14);
+          const height = width * 1.45;
+          const color = PETAL_COLORS[(i + 2) % PETAL_COLORS.length];
+
+          return (
+            <motion.div
+              key={`cascade-${i}`}
+              className="absolute top-[-70px]"
+              style={{
+                left: `${left}%`,
+                width,
+                height,
+                willChange: 'transform, opacity',
+              }}
+              initial={{ y: -70, opacity: 0, scale: 0.7 }}
+              animate={{
+                y: ['0vh', '115vh'],
+                x: [0, (i % 2 === 0 ? 30 : -30)],
+                rotate: [0, (i % 2 === 0 ? 360 : -360)],
+                opacity: [0, 0.9, 0.85, 0],
+                scale: [0.7, 1, 0.95],
+              }}
+              transition={{
+                duration: 6 + (i % 4),
+                delay: i * 0.18,
+                ease: 'easeOut',
+              }}
+            >
+              <svg viewBox="0 0 32 46" className="w-full h-full drop-shadow-[0_4px_8px_rgba(180,40,65,0.12)]" fill="none">
+                <path
+                  d="M 16 1 C 5 7, 0 20, 1 31 C 2 40, 10 45, 16 45 C 22 45, 30 40, 31 31 C 32 20, 27 7, 16 1 Z"
+                  fill={color}
+                />
+              </svg>
+            </motion.div>
+          );
+        })}
+
+      {/* 3. Interactive Bursts (Gentle, lightweight petals on tap) */}
+      <AnimatePresence>
+        {bursts.map((b) => (
           <motion.div
-            key={cp.id}
-            className="absolute -top-24"
-            style={{ left: `${cp.left}%` }}
-            initial={{ y: '-10vh', opacity: 0 }}
-            animate={{
-              y: ['0vh', '120vh'],
-              x: [0, cp.driftX, cp.driftX * 0.5],
-              rotate: [cp.rotation, cp.rotation + 420],
-              opacity: [0, cp.opacity, cp.opacity, 0],
+            key={b.id}
+            className="absolute top-0 left-0"
+            style={{
+              width: b.size,
+              height: b.size * 1.45,
+              willChange: 'transform, opacity',
             }}
+            initial={{
+              x: b.x - b.size / 2,
+              y: b.y,
+              opacity: 0.95,
+              scale: 0.8,
+              rotate: b.rotation,
+            }}
+            animate={{
+              x: b.x + b.dx,
+              y: b.y + b.dy + 80,
+              opacity: 0,
+              scale: 1.05,
+              rotate: b.rotation + 180,
+            }}
+            exit={{ opacity: 0 }}
             transition={{
-              duration: cp.duration,
-              delay: cp.delay,
-              ease: 'easeInOut',
+              duration: 2.1,
+              ease: [0.22, 1, 0.36, 1],
             }}
           >
-            <LuxuryPetal
-              color={cp.color}
-              size={cp.size}
-              rotation={cp.rotation}
-              opacity={cp.opacity}
-              variant={cp.variant}
-            />
+            <svg viewBox="0 0 32 46" className="w-full h-full drop-shadow-[0_4px_6px_rgba(180,40,65,0.1)]" fill="none">
+              <path
+                d="M 16 1 C 5 7, 0 20, 1 31 C 2 40, 10 45, 16 45 C 22 45, 30 40, 31 31 C 32 20, 27 7, 16 1 Z"
+                fill={b.color || '#E64C65'}
+              />
+              <path
+                d="M 16 6 C 11 12, 8 22, 10 32 C 12 38, 15 41, 16 41"
+                stroke="#FFFFFF"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+                opacity="0.4"
+              />
+            </svg>
           </motion.div>
         ))}
-
-      {/* Dynamic Interactive Petals (Flying from touch & tumbling down over the flowers & card) */}
-      {bursts.map((b) => (
-        <motion.div
-          key={b.id}
-          className="absolute"
-          style={{ left: b.x, top: b.y }}
-          initial={{
-            opacity: 0,
-            scale: 0.4,
-            x: 0,
-            y: 0,
-            rotate: b.rotation,
-          }}
-          animate={{
-            opacity: [0, 1, 0.95, 0],
-            scale: [0.4, 1.15, 1, 0.9],
-            x: [0, b.dx * 0.7, b.dx],
-            y: [0, b.dy, b.dy + 80], // falls down gracefully over the flower
-            rotate: [b.rotation, b.rotation + 220],
-          }}
-          transition={{
-            duration: b.duration || 2.4,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-        >
-          <LuxuryPetal
-            color={b.color}
-            size={b.size}
-            rotation={b.rotation}
-            opacity={0.95}
-            variant={0}
-          />
-        </motion.div>
-      ))}
+      </AnimatePresence>
     </div>
   );
 }

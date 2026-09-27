@@ -13,10 +13,7 @@ export default function OpeningScreen({ onOpen }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center px-6 overflow-hidden select-none"
-      style={{
-        background: 'radial-gradient(circle at 50% 45%, #FFFFFF 0%, #FAF5F0 50%, #F5EFEB 100%)',
-      }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center px-6 overflow-hidden select-none bg-white"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.04 }}
       transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -36,7 +33,7 @@ export default function OpeningScreen({ onOpen }) {
           <div className="w-14 h-14 rounded-full bg-white shadow-[0_8px_24px_rgba(212,122,136,0.18)] border border-[#F2D7DC] flex items-center justify-center mb-3">
             <span className="text-2xl transform hover:scale-110 transition-transform">🌷</span>
           </div>
-   
+      
         </motion.div>
 
         {/* Introductory dedicated note */}
